@@ -41,6 +41,13 @@ h1{font-family:var(--mincho);font-size:34px;line-height:1.3;margin:0;text-wrap:b
 .open{display:flex;justify-content:center;align-items:center;min-height:48px;border-radius:10px;background:var(--ai);color:var(--paper);font-weight:700;text-decoration:none;font-size:16px}
 .open.soon{background:var(--ai-soft);color:var(--sub);pointer-events:none}
 .open:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+.toc{margin:6px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:4px 6px}
+.toc-h{font-size:12px;letter-spacing:.2em;color:var(--moss);font-weight:700;padding:8px 10px 2px}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li+li{border-top:1px solid var(--line)}
+.toc a{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 10px;color:var(--ink);text-decoration:none;font-family:var(--mincho);font-size:17px;font-weight:700;line-height:1.35}
+.toc .k{flex:none;min-width:3.6em;color:var(--ai);font-family:var(--gothic);font-size:13px;font-weight:700}
+.toc .arrow{margin-left:auto;color:var(--ai);font-size:20px}
 footer{margin-top:28px;text-align:center;font-size:13px;color:var(--sub)}
 </style></head>
 <body>
@@ -51,6 +58,7 @@ footer{margin-top:28px;text-align:center;font-size:13px;color:var(--sub)}
     <p class="lead">信州の山あいの村を舞台にした、六冊の朗読帖です。本文を目で追いながら、朗読を耳で聞くことができます。</p>
     <div class="author">作　中島義健</div>
     <p class="how">「この朗読帖を開く」を押すと、それぞれの朗読帖のページが開きます。「はじめに」から再生すると、最後の話まで続けて聞けます。</p>
+    <nav class="toc" aria-label="朗読帖の一覧"><div class="toc-h">本棚の朗読帖</div><ol id="toc"></ol></nav>
   </header>
   <section class="shelf">
 <article class="book" id="roudoku">
@@ -335,6 +343,17 @@ document.querySelectorAll(".open").forEach(a=>{
   const r=REPO[a.dataset.book];
   if(r){a.href="https://"+OWNER+".github.io/"+r+"/";}
   else{a.classList.add("soon");a.textContent="リンク準備中";a.removeAttribute("href");}
+});
+/* 上の一覧：六冊の名前から、それぞれの朗読帖のページへ */
+const KAN=["一","二","三","四","五","六","七","八","九","十"];
+const toc=document.getElementById("toc");
+document.querySelectorAll(".book").forEach((b,i)=>{
+  const li=document.createElement("li"),a=document.createElement("a");
+  a.innerHTML='<span class="k"></span><span class="t"></span><span class="arrow">›</span>';
+  a.querySelector(".k").textContent="第"+KAN[i]+"冊";
+  a.querySelector(".t").textContent=b.querySelector("h2").textContent;
+  const r=REPO[b.id];if(r)a.href="https://"+OWNER+".github.io/"+r+"/";
+  li.appendChild(a);toc.appendChild(li);
 });
 </script>
 </body></html>
